@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typography Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Typography Generator</h1>
+    
+    <div class="theme-toggle">
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider round"></span>
+      </label>
+      <span class="toggle-label">Dark Mode</span>
+    </div>
+    
+    <div class="controls">
+      <div class="control-group">
+        <label for="fontSelect">Font:</label>
+        <select id="fontSelect">
+          <option value="font1">Instacart Contrast Headline</option>
+          <option value="font2">Instacart Contrast Headline Bold</option>
+          <option value="font3">Instacart Contrast Headline Extra Bold</option>
+          <option value="font4">Instacart Contrast Text Bold</option>
+          <option value="font5">Instacart Sans Headline Regular</option>
+          <option value="font6">Instacart Sans Headline Semi Bold</option>
+          <option value="font7">Instacart Sans Text Regular Italic</option>
+          <option value="font8">Baguet Script Regular</option>
+          <option value="font9">Instacart Sans Text Regular</option>
+        </select>
+        
+        <div class="custom-font-section">
+          <button id="customFontBtn" class="secondary-btn">Upload Custom Font</button>
+          <input type="file" id="fontUploader" accept=".ttf,.otf,.woff,.woff2" style="display:none;">
+          <div id="customFontsList" class="custom-fonts-list"></div>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label for="fontSize">Size:</label>
+        <select id="fontSize">
+          <option value="12">12px</option>
+          <option value="14">14px</option>
+          <option value="16">16px</option>
+          <option value="18">18px</option>
+          <option value="20">20px</option>
+          <option value="24">24px</option>
+          <option value="28">28px</option>
+          <option value="32">32px</option>
+          <option value="36" selected>36px</option>
+          <option value="42">42px</option>
+          <option value="48">48px</option>
+          <option value="56">56px</option>
+          <option value="64">64px</option>
+          <option value="72">72px</option>
+          <option value="96">96px</option>
+          <option value="120">120px</option>
+        </select>
+      </div>
+      
+      <div class="control-group">
+        <label for="textColor">Text Color:</label>
+        <input type="color" id="textColor" value="#000000">
+      </div>
+      
+      <div class="control-group">
+        <label>Brand Colors:</label>
+        <div class="color-swatches">
+          <button class="color-swatch active" style="background-color: #000000;" data-color="#000000" title="Black"></button>
+          <button class="color-swatch" style="background-color: #FFFFFF;" data-color="#FFFFFF" title="White"></button>
+          <button class="color-swatch" style="background-color: #003D29;" data-color="#003D29" title="Kale"></button>
+          <button class="color-swatch" style="background-color: #FF7009;" data-color="#FF7009" title="Carrot"></button>
+          <button class="color-swatch" style="background-color: #FAF1E5;" data-color="#FAF1E5" title="Cashew"></button>
+          <button class="color-swatch" style="background-color: #0AAD0A;" data-color="#0AAD0A" title="Lime"></button>
+          <button class="color-swatch" style="background-color: #BA0239;" data-color="#BA0239" title="Pomegranate"></button>
+          <button class="color-swatch" style="background-color: #FF7A9B;" data-color="#FF7A9B" title="Guava"></button>
+          <button class="color-swatch" style="background-color: #C22F00;" data-color="#C22F00" title="Cinnamon"></button>
+          <button class="color-swatch" style="background-color: #ECAA01;" data-color="#ECAA01" title="Turmeric"></button>
+          <button class="color-swatch" style="background-color: #750046;" data-color="#750046" title="Plus Plum"></button>
+          <button class="color-swatch" style="background-color: #B9017A;" data-color="#B9017A" title="Plus Berry"></button>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label for="letterSpacing">Spacing:</label>
+        <div class="range-container">
+          <input type="range" id="letterSpacing" min="-2" max="10" step="0.1" value="0">
+          <span id="letterSpacingValue">0px</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="format-controls">
+      <button id="resetBtn" class="secondary-btn" title="Reset Formatting">Reset</button>
+      <button id="boldBtn" class="format-btn" title="Bold">B</button>
+      <button id="italicBtn" class="format-btn" title="Italic"><i>I</i></button>
+      <button id="underlineBtn" class="format-btn" title="Underline"><u>U</u></button>
+      <button id="strikeBtn" class="format-btn" title="Strikethrough"><s>S</s></button>
+      
+      <div class="align-controls">
+        <button id="alignLeftBtn" class="format-btn" title="Align Left">⇐</button>
+        <button id="alignCenterBtn" class="format-btn" title="Align Center">↔</button>
+        <button id="alignRightBtn" class="format-btn" title="Align Right">⇒</button>
+      </div>
+    </div>
+    
+    <div class="input-area">
+      <div id="richTextEditor" contenteditable="true" class="rich-text-editor" placeholder="Type your text here...">Sample Text</div>
+      <div class="editor-instructions">
+        Select text to apply different styles. Click anywhere to continue typing.
+      </div>
+    </div>
+    
+    <div class="preview-section">
+      <h3 class="preview-label">Preview</h3>
+      <div class="preview">
+        <div id="textPreview">Sample Text</div>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button id="downloadBtn">Download as PNG</button>
+    </div>
+  </div>
+  
+  <!-- Toast notification for reset confirmation -->
+  <div id="toast-notification" class="toast-notification">Formatting has been reset</div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
