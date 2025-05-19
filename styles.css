@@ -48,14 +48,15 @@
 :root {
   --primary-color: #0AAD0A;
   --primary-hover: #088A08;
-  --background-light: #003D29; /* Changed from #f5f5f5 to dark green "Kale" */
+  --background-light: #003D29; /* Changed from #f5f5f5 to #003D29 for dark green background */
   --background-dark: #222;
-  --text-light: #FFFFFF; /* Consider changing from #333 to white for better readability */
+  --text-light: #000000; /* Black text for good contrast on cashew container */
   --text-dark: #eee;
   --border-light: #ddd;
   --border-dark: #555;
-  --card-bg-light: #fff;
+  --card-bg-light: #FAF1E5; /* Changed from #fff to #FAF1E5 */
   --card-bg-dark: #333;
+  --input-bg-light: #fff; /* New variable for input backgrounds */
 }
 
 * {
@@ -118,7 +119,7 @@ select, input[type="number"] {
   border: 1px solid var(--border-light);
   font-family: inherit;
   font-size: 14px;
-  background-color: var(--card-bg-light);
+  background-color: var(--input-bg-light); /* Changed to use new variable */
   color: var(--text-light);
   width: 100%;
   transition: border-color 0.2s;
@@ -223,7 +224,7 @@ input[type="color"]::-webkit-color-swatch {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  background-color: var(--card-bg-light);
+  background-color: var(--input-bg-light); /* Changed to use new variable */
   border: 1px solid var(--border-light);
   border-radius: 6px;
   cursor: pointer;
@@ -256,6 +257,7 @@ input[type="color"]::-webkit-color-swatch {
   outline: none;
   overflow-y: auto;
   transition: border-color 0.2s;
+  background-color: var(--input-bg-light); /* Changed to use new variable */
 }
 
 .rich-text-editor:focus {
@@ -293,7 +295,7 @@ input[type="color"]::-webkit-color-swatch {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--card-bg-light);
+  background-color: var(--input-bg-light); /* Changed to use new variable */
   margin-bottom: 20px;
   border-radius: 6px;
   transition: background-color 0.3s, border-color 0.3s;
@@ -373,6 +375,7 @@ input[type="color"]::-webkit-color-swatch {
   margin-top: 8px;
   border: 1px solid var(--border-light);
   border-radius: 6px;
+  background-color: var(--input-bg-light); /* Changed to use new variable */
 }
 
 .custom-font-item {
