@@ -133,5 +133,25 @@
   <div id="toast-notification" class="toast-notification">Formatting has been reset</div>
   
   <script src="script.js"></script>
+  
+// Add this script to your main index.html file
+// Place it before the closing </body> tag
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if the user is authenticated
+    const isAuthenticated = sessionStorage.getItem('authenticated');
+    
+    // If not authenticated, redirect to the password page
+    if (isAuthenticated !== 'true') {
+        window.location.href = 'password.html';
+    }
+    
+    // Add a logout function (optional)
+    // You can add a logout button with onclick="logout()" to your page
+    window.logout = function() {
+        sessionStorage.removeItem('authenticated');
+        window.location.href = 'password.html';
+    };
+});
 </body>
 </html>
