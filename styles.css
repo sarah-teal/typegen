@@ -48,13 +48,13 @@
 :root {
   --primary-color: #0AAD0A;
   --primary-hover: #088A08;
-  --background-light: #003D29; /* Changed from #f5f5f5 to #003D29 for dark green background */
+  --background-light: #003D29; /* Dark green background */
   --background-dark: #222;
   --text-light: #000000; /* Black text for good contrast on cashew container */
   --text-dark: #eee;
   --border-light: #ddd;
   --border-dark: #555;
-  --card-bg-light: #FAF1E5; /* Changed from #fff to #FAF1E5 */
+  --card-bg-light: #FAF1E5; /* Cashew colored container */
   --card-bg-dark: #333;
   --input-bg-light: #fff; /* New variable for input backgrounds */
 }
@@ -65,23 +65,192 @@
   padding: 0;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Static background image for both light and dark modes */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  line-height: 1.6;
-  padding: 20px;
-  background-color: var(--background-light);
+  background-color: #ffffff; /* Fallback color */
+  background-image: url('produce-green.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  transition: color 0.3s ease;
+}
+
+/* Dark mode styling with overlay for darker appearance but same background image */
+body.dark-mode {
+  color: var(--text-dark);
+  position: relative;
+}
+
+/* Add a semi-transparent overlay in dark mode for a darker feel */
+body.dark-mode::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Add additional dark mode contrast improvements */
+body.dark-mode .container {
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent container for better readability */
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Ensure text remains readable in both modes */
+body.dark-mode .rich-text-editor {
+  background-color: rgba(10, 10, 10, 0.2);
+  border-color: #555;
+  /* No color override to preserve text colors */
+}
+
+/* Make the preview transparent in dark mode */
+body.dark-mode .preview {
+  background-color: transparent;
+  border-color: rgba(255, 255, 255, 0.2);
+  /* No color override to preserve text colors */
+}
+
+/* Ensure preview text is fully transparent without changing text color */
+body.dark-mode #textPreview {
+  background-color: transparent;
+  /* No color override to preserve text colors */
+}
+
+/* CRITICAL - STRONGER rules to force text colors in dark mode */
+body.dark-mode span[style*="color"],
+body.dark-mode font[color],
+body.dark-mode .rich-text-editor span[style*="color"],
+body.dark-mode .rich-text-editor font[color],
+body.dark-mode .preview span[style*="color"],
+body.dark-mode .preview font[color],
+body.dark-mode #textPreview span[style*="color"],
+body.dark-mode #textPreview font[color] {
+  color: inherit !important;
+}
+
+/* Override any text styling that might be coming from parent elements */
+body.dark-mode .rich-text-editor,
+body.dark-mode #textPreview {
+  color: initial !important;
+}
+
+/* Force black for text with no explicit color in dark mode */
+body.dark-mode .rich-text-editor:not([style*="color"]),
+body.dark-mode #textPreview:not([style*="color"]) {
+  color: #000000 !important;
+}
+
+/* Reset any default text color */
+.rich-text-editor {
+  color: initial;
+}
+
+#textPreview {
+  color: initial;
+}
+
+/* Editor Label styling (for "Write text below") */
+.editor-label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
   color: var(--text-light);
-  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Make dark mode color changes to UI elements only */
+body.dark-mode .editor-label {
+  color: var(--text-dark);
+}
+
+/* Make direct color changes to text elements */
+h1, label, .preview-label, .toggle-label, #letterSpacingValue {
+  color: var(--text-light);
+}
+
+/* Make sure all inputs and interactive elements have white backgrounds */
+select, input[type="number"], .rich-text-editor, .preview, .custom-fonts-list, .format-btn {
+  background-color: var(--input-bg-light);
 }
 
 .container {
   max-width: 800px;
-  margin: 0 auto;
   background-color: var(--card-bg-light);
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s, box-shadow 0.3s;
+  
+  /* Center the container vertically and horizontally */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  /* Handle overflow better */
+  max-height: 95vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar styling for better appearance */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+body.dark-mode .container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Header and Utility Controls */
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.utility-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: auto; /* This pushes the utility buttons to the right */
+}
+
+.logout-btn {
+  padding: 8px 16px;
+  background-color: #666;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #555;
 }
 
 h1 {
@@ -195,10 +364,41 @@ input[type="color"]::-webkit-color-swatch {
   padding: 0;
   transition: transform 0.1s;
   margin-bottom: 4px;
+  position: relative; /* Added for tooltip positioning */
+}
+
+/* Special outline for the Cashew color swatch */
+.color-swatch[data-color="#FAF1E5"] {
+  border: 1px solid #ccc;
 }
 
 .color-swatch:hover {
   transform: scale(1.15);
+}
+
+/* Color swatch tooltip */
+.color-swatch::after {
+  content: attr(title);
+  position: absolute;
+  top: -30px; /* Changed from bottom to top */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 100; /* Increased z-index significantly */
+  pointer-events: none; /* Ensures hover doesn't get interrupted */
+}
+
+.color-swatch:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 .color-swatch.active {
@@ -495,12 +695,144 @@ input:checked + .slider:before {
   color: var(--text-light);
 }
 
-/* Dark Mode Styles */
-body.dark-mode {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
+/* Export History Styles */
+.history-section {
+  margin-bottom: 20px;
 }
 
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.history-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin: 0;
+}
+
+.export-history-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 15px;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  background-color: var(--input-bg-light);
+}
+
+.history-item {
+  position: relative;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  aspect-ratio: 1.6 / 1;
+  background-color: white;
+}
+
+.history-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.history-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.history-item-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.history-item:hover .history-item-overlay {
+  opacity: 1;
+}
+
+.history-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+.history-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.history-edit-btn {
+  color: #ECAA01; /* Turmeric color for edit button */
+}
+
+.history-download-btn {
+  color: var(--primary-color);
+}
+
+.history-delete-btn {
+  color: #ff4d4d;
+}
+
+.history-timestamp {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 3px 6px;
+  font-size: 10px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.history-item:hover .history-timestamp {
+  opacity: 1;
+}
+
+.empty-history-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 30px 0;
+  color: #999;
+  font-style: italic;
+}
+
+/* Signature */
+.signature {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  color: #FFFFFF;
+  opacity: 0.7;
+  z-index: 100;
+  pointer-events: none; /* Makes it non-interactive */
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Adds a subtle shadow for better visibility */
+}
+
+/* Dark Mode Styles - Additional styles that don't conflict with background image */
 body.dark-mode .container {
   background-color: var(--card-bg-dark);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -521,23 +853,19 @@ body.dark-mode .format-btn.active {
   color: white;
 }
 
-body.dark-mode textarea,
-body.dark-mode .rich-text-editor {
+body.dark-mode textarea {
   background-color: #444;
   color: var(--text-dark);
   border-color: #555;
-}
-
-body.dark-mode .preview {
-  border-color: #555;
-  background-color: var(--card-bg-dark);
 }
 
 body.dark-mode #letterSpacingValue,
 body.dark-mode label,
 body.dark-mode .toggle-label,
 body.dark-mode .preview-label,
-body.dark-mode h1 {
+body.dark-mode .editor-label,
+body.dark-mode h1,
+body.dark-mode .history-label {
   color: var(--text-dark);
 }
 
@@ -564,11 +892,55 @@ body.dark-mode .custom-font-item {
 
 body.dark-mode .custom-fonts-list {
   border-color: #555;
+  background-color: #444;
 }
 
 body.dark-mode .toast-notification {
   background-color: rgba(255, 255, 255, 0.8);
   color: #222;
+}
+
+body.dark-mode .logout-btn {
+  background-color: #555;
+  color: var(--text-dark);
+  border-color: #666;
+}
+
+body.dark-mode .logout-btn:hover {
+  background-color: #444;
+}
+
+body.dark-mode .export-history-container {
+  background-color: var(--card-bg-dark);
+  border-color: #555;
+}
+
+body.dark-mode .history-item {
+  border-color: #555;
+  background-color: #444;
+}
+
+body.dark-mode .empty-history-message {
+  color: #777;
+}
+
+/* Add CSS for background transition effect */
+.bg-transitioning::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: -1;
+  animation: fadeInOut 0.5s ease;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* Make the app responsive on smaller screens */
@@ -581,4 +953,58 @@ body.dark-mode .toast-notification {
     margin-left: 0;
     margin-top: 10px;
   }
+  
+  .header-controls {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .utility-buttons {
+    margin-top: 10px;
+  }
+  
+  .export-history-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .history-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Adjust container positioning for mobile */
+  .container {
+    position: relative;
+    top: 5%;
+    left: 0;
+    transform: none;
+    margin: 20px auto;
+    width: 90%;
+    max-height: none;
+  }
+}
+.subtle-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.subtle-link:hover {
+  opacity: 0.7;
+}
+
+.signature {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #666; /* Ensure this has some color */
+  display: block; /* Ensure it's displayed as a block element */
+  width: 100%; /* Make it take up full width */
+  position: relative; /* Ensure it's in the normal document flow */
+  opacity: 1; /* Make sure it's fully visible */
+  z-index: 1; /* Ensure it's above any background elements */
 }

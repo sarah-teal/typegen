@@ -7,17 +7,61 @@
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="html2canvas.min.js"></script>
+  <style>
+    .subtle-link {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .subtle-link:hover {
+      opacity: 0.7;
+    }
+    
+    /* Updated signature style with brighter color */
+    body .signature {
+      position: fixed !important;
+      bottom: 15px !important;
+      left: 15px !important;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9) !important; /* Brighter white with slight transparency */
+      z-index: 100 !important;
+      text-align: left !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      transform: none !important;
+      width: auto !important;
+      display: block !important;
+    }
+    
+    /* Add a subtle text shadow to help with visibility on both light and dark backgrounds */
+    body .signature, 
+    body .signature a {
+      text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* Maintain consistent color in dark mode */
+    body.dark-mode .signature {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Typography Generator</h1>
-    
-    <div class="theme-toggle">
-      <label class="switch">
-        <input type="checkbox" id="darkModeToggle">
-        <span class="slider round"></span>
-      </label>
-      <span class="toggle-label">Dark Mode</span>
+    <div class="header-controls">
+      <h1>Instacart Typography Generator</h1>
+      
+      <div class="utility-buttons">
+        <div class="theme-toggle">
+          <label class="switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider round"></span>
+          </label>
+          <span class="toggle-label">Dark Mode</span>
+        </div>
+        <button id="logoutBtn" class="logout-btn" onclick="logout()">Logout</button>
+      </div>
     </div>
     
     <div class="controls">
@@ -111,6 +155,7 @@
     </div>
     
     <div class="input-area">
+      <div class="editor-label">Write text below</div>
       <div id="richTextEditor" contenteditable="true" class="rich-text-editor" placeholder="Type your text here...">Sample Text</div>
       <div class="editor-instructions">
         Select text to apply different styles. Click anywhere to continue typing.
@@ -128,30 +173,75 @@
       <button id="downloadBtn">Download as PNG</button>
     </div>
   </div>
-  
+
+  <!-- Signature positioned at bottom left with brighter color -->
+  <div class="signature">// created by <a href="https://atlas.instacart.tools/people/8904-sarah-thiel" class="subtle-link">@sarah</a> ✨</div>
+
   <!-- Toast notification for reset confirmation -->
   <div id="toast-notification" class="toast-notification">Formatting has been reset</div>
   
   <script src="script.js"></script>
-  
-// Add this script to your main index.html file
-// Place it before the closing </body> tag
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if the user is authenticated
-    const isAuthenticated = sessionStorage.getItem('authenticated');
-    
-    // If not authenticated, redirect to the password page
-    if (isAuthenticated !== 'true') {
-        window.location.href = 'password.html';
-    }
-    
-    // Add a logout function (optional)
-    // You can add a logout button with onclick="logout()" to your page
-    window.logout = function() {
-        sessionStorage.removeItem('authenticated');
-        window.location.href = 'password.html';
-    };
-});
+  <!-- Authentication script with improved dark mode toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if the user is authenticated
+        const isAuthenticated = sessionStorage.getItem('authenticated');
+        
+        // If not authenticated, redirect to the password page
+        if (isAuthenticated !== 'true') {
+            window.location.href = 'password.html';
+        }
+        
+        // Add a logout function
+        window.logout = function() {
+            sessionStorage.removeItem('authenticated');
+            window.location.href = 'password.html';
+        };
+        
+        // Improved dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            // Set initial state
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+            }
+            
+            // Add click handler with debounce
+            let darkModeProcessing = false;
+            darkModeToggle.addEventListener('click', function() {
+                if (darkModeProcessing) return;
+                darkModeProcessing = true;
+                
+                // Toggle the class
+                document.body.classList.toggle('dark-mode');
+                
+                // Store preference
+                localStorage.setItem('darkMode', this.checked ? 'true' : 'false');
+                
+                // Handle color preservation in dark mode
+                if (this.checked && document.getElementById('richTextEditor')) {
+                    const richTextEditor = document.getElementById('richTextEditor');
+                    // Check if there's any styled content
+                    const hasStyledContent = richTextEditor.querySelector('[style*="color"]');
+                    if (!hasStyledContent) {
+                        // No styled content, wrap everything in black
+                        const content = richTextEditor.textContent;
+                        richTextEditor.innerHTML = `<span style="color: #000000;">${content}</span>`;
+                    }
+                }
+                
+                // Update preview after a slight delay to allow transitions
+                setTimeout(function() {
+                    if (typeof updatePreview === 'function') {
+                        updatePreview();
+                    }
+                    darkModeProcessing = false;
+                }, 300);
+            });
+        }
+    });
+  </script>
 </body>
 </html>
